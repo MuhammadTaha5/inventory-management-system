@@ -1,0 +1,5 @@
+[31-May-2025 23:32:03 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: CONSTRAINT `CONSTRAINT_3` failed for `inventorysystem`.`product` in C:\xampp\htdocs\database-project\product_Detail.php:73
+Stack trace:
+#0 C:\xampp\htdocs\database-project\product_Detail.php(73): mysqli_stmt->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\database-project\product_Detail.php on line 73
