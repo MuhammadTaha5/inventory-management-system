@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClosetStock - Reports Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="css/sales-report.css"/>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="Images/Closet.png" alt="ClosetStock Logo">
+            <h2>ClosetStock</h2>
+        </div>
+        <ul class="report-menu">
+            <li><a href="#" class="active" data-report="sales"><i class="fas fa-chart-line"></i> <span>Sales Reports</span></a></li>
+            <li><a href="#" data-report="purchases"><i class="fas fa-shopping-cart"></i> <span>Purchase Reports</span></a></li>
+            <li><a href="#" data-report="inventory"><i class="fas fa-boxes"></i> <span>Inventory Status</span></a></li>
+            <li><a href="#" data-report="low-stock"><i class="fas fa-exclamation-triangle"></i> <span>Low Stock Alerts</span></a></li>
+            <li><a href="#" data-report="profit-loss"><i class="fas fa-money-bill-wave"></i> <span>Profit & Loss</span></a></li>
+            <li><a href="#" data-report="top-products"><i class="fas fa-star"></i> <span>Top Selling</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Reports Dashboard</h1>
+        </div>
+
+        <!-- Sales Report Content -->
+        <div class="report-content" id="sales-report">
+            <div class="report-title">
+                <h2><i class="fas fa-chart-line"></i> Sales Reports</h2>
+                <div class="report-actions">
+                    <button class="btn btn-outline" id="sales-pdf-btn"><i class="fas fa-file-pdf"></i> PDF</button>
+                    <button class="btn btn-outline" id="sales-excel-btn"><i class="fas fa-file-excel"></i> Excel</button>
+                    <button class="btn btn-primary" id="sales-print-btn"><i class="fas fa-print"></i> Print</button>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label for="sales-date-range">Date Range</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="date" id="sales-start-date">
+                        <span>to</span>
+                        <input type="date" id="sales-end-date">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label for="sales-amount">Amount</label>
+<select id="sales-amount">
+    <option value="">All</option>
+    <option value="1000">&gt; 1000</option>
+    <option value="2000">&gt; 2000</option>
+    <option value="3000">&gt; 3000</option>
+</select>
+
+                </div>
+                <div class="filter-group">
+                    
+                </div>
+                <button class="apply-filters" id="sales-apply-filters-btn"><i class="fas fa-filter"></i> Apply Filters</button>
+            </div>
+
+            <!-- View Toggle Buttons -->
+            <div class="view-toggle">
+                <button class="view-toggle-btn active" id="sales-show-table-btn">
+                    <i class="fas fa-table"></i> Show Table
+                </button>
+                <button class="view-toggle-btn" id="sales-show-graph-btn">
+                    <i class="fas fa-chart-bar"></i> Show Graph
+                </button>
+            </div>
+
+            <!-- Data Display -->
+            <div class="data-display">
+                <!-- Table Container -->
+                <div class="table-container" id="sales-table-container">
+                    <table id="sales-table">
+  <thead>
+    <tr>
+      <th>Sale ID</th>
+      <th>Customer Name</th>
+      <th>Total Quantity</th>
+      <th>Total Amount</th>
+      <th>Discount</th>
+      <th>Final Amount</th>
+      <th>Payment Method</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody id="sales-data">
+    <!-- Rows will be inserted via JS -->
+  </tbody>
+</table>
+
+                </div>
+
+                <!-- Graph Container -->
+                <div class="graph-container" id="sales-graph-container">
+                    <h3 class="graph-title">Sales Performance</h3>
+                    
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Purchase Report Content -->
+        <div class="report-content" id="purchases-report" style="display: none;">
+            <div class="report-title">
+                <h2><i class="fas fa-shopping-cart"></i> Purchase Reports</h2>
+                <div class="report-actions">
+                    <button class="btn btn-outline" id="purchases-pdf-btn"><i class="fas fa-file-pdf"></i> PDF</button>
+                    <button class="btn btn-outline" id="purchases-excel-btn"><i class="fas fa-file-excel"></i> Excel</button>
+                    <button class="btn btn-primary" id="purchases-print-btn"><i class="fas fa-print"></i> Print</button>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label for="purchases-date-range">Date Range</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="date" id="purchases-start-date">
+                        <span>to</span>
+                        <input type="date" id="purchases-end-date">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label for="purchases-product">Product</label>
+                    <select id="purchases-product">
+                        <option value="">All Products</option>
+                        <option value="T-Shirt">T-Shirt</option>
+                        <option value="Jeans">Jeans</option>
+                        <option value="Sneakers">Sneakers</option>
+                        <option value="Dress">Dress</option>
+                        <option value="Jacket">Jacket</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="purchases-supplier">Supplier</label>
+                    <select id="purchases-supplier">
+                        <option value="">All Suppliers</option>
+                        <option value="Fashion Fabrics Inc.">Fashion Fabrics Inc.</option>
+                        <option value="Textile Traders">Textile Traders</option>
+                        <option value="Global Garments">Global Garments</option>
+                        <option value="Premium Apparel">Premium Apparel</option>
+                    </select>
+                </div>
+                <button class="apply-filters" id="purchases-apply-filters-btn"><i class="fas fa-filter"></i> Apply Filters</button>
+            </div>
+
+            <!-- View Toggle Buttons -->
+            <div class="view-toggle">
+                <button class="view-toggle-btn active" id="purchases-show-table-btn">
+                    <i class="fas fa-table"></i> Show Table
+                </button>
+                <button class="view-toggle-btn" id="purchases-show-graph-btn">
+                    <i class="fas fa-chart-bar"></i> Show Graph
+                </button>
+            </div>
+
+            <!-- Data Display -->
+            <div class="data-display">
+                <!-- Table Container -->
+                <div class="table-container" id="purchases-table-container">
+                    <table id="purchases-table">
+                        <thead>
+                            <tr>
+                                <th>PO Number</th>
+                                <th>Supplier</th>
+                                <th>Product Name</th>
+                                <th>Total Cost</th>
+                                <th>Payment Method</th>
+                             
+                                
+                                <th>Order Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchases-data">
+                            <tr>
+                                <td>PO-2023-001</td>
+                                <td>Fashion Fabrics Inc.</td>
+                                <td>T-Shirt</td>
+                                <td>Black</td>
+                                <td>100</td>
+                                <td>$8.50</td>
+                                <td>$850.00</td>
+                                <td>2023-06-10</td>
+                                <td><span class="status delivered">Delivered</span></td>
+                            </tr>
+                            <tr>
+                                <td>PO-2023-002</td>
+                                <td>Textile Traders</td>
+                                <td>Jeans</td>
+                                <td>Blue</td>
+                                <td>50</td>
+                                <td>$25.00</td>
+                                <td>$1,250.00</td>
+                                <td>2023-06-05</td>
+                                <td><span class="status delivered">Delivered</span></td>
+                            </tr>
+                            <tr>
+                                <td>PO-2023-003</td>
+                                <td>Global Garments</td>
+                                <td>Sneakers</td>
+                                <td>White</td>
+                                <td>30</td>
+                                <td>$45.00</td>
+                                <td>$1,350.00</td>
+                                <td>2023-06-15</td>
+                                <td><span class="status pending">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Graph Container -->
+                <div class="graph-container" id="purchases-graph-container">
+                    <h3 class="graph-title">Purchase Performance</h3>
+                    <div class="graph-period-toggle">
+                        <button class="view-toggle-btn active" id="purchases-daily-btn">Daily</button>
+                        <button class="view-toggle-btn" id="purchases-weekly-btn">Weekly</button>
+                        <button class="view-toggle-btn" id="purchases-monthly-btn">Monthly</button>
+                    </div>
+                    <canvas id="purchasesChart"></canvas>
+                </div>
+            </div>
+        </div>
+<!-- Inventory Status Report Content -->
+<div class="report-content" id="inventory-report" style="display: none;">
+    <div class="report-title">
+        <h2><i class="fas fa-boxes"></i> Inventory Status</h2>
+        <div class="report-actions">
+            <button class="btn btn-outline" id="inventory-pdf-btn"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn btn-outline" id="inventory-excel-btn"><i class="fas fa-file-excel"></i> Excel</button>
+            <button class="btn btn-primary" id="inventory-print-btn"><i class="fas fa-print"></i> Print</button>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-group">
+            <label for="inventory-category">Category</label>
+            <select id="inventory-category">
+    <option value="">All Categories</option>
+    <option value="Shirts">Shirts</option>
+    <option value="Jackets">Jackets</option>
+    <option value="Pants">Pants</option>
+    <option value="Jeans">Jeans</option>
+</select>
+        </div>
+        <div class="filter-group">
+            <label for="inventory-size">Size</label>
+            <select id="inventory-size">
+    <option value="">All Sizes</option>
+    <option value="S">S</option>
+    <option value="M">M</option>
+    <option value="L">L</option>
+    <option value="XL">XL</option>
+</select>
+        </div>
+        <div class="filter-group">
+            <label for="inventory-color">Color</label>
+            <select id="inventory-color">
+                <option value="">All Colors</option>
+                <option value="Black">Black</option>
+                <option value="White">White</option>
+                <option value="Blue">Blue</option>
+                <option value="Red">Red</option>
+                <option value="Green">Green</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="inventory-status">Stock Status</label>
+            <select id="inventory-status">
+                <option value="">All</option>
+                <option value="in-stock">In Stock</option>
+                <option value="low-stock">Low Stock</option>
+                <option value="out-of-stock">Out of Stock</option>
+            </select>
+        </div>
+        <button class="apply-filters" id="inventory-apply-filters-btn"><i class="fas fa-filter"></i> Apply Filters</button>
+    </div>
+
+    <!-- Data Display -->
+    <div class="data-display">
+        <div class="table-container">
+            <table id="inventory-table">
+                <thead>
+    <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th colspan="3">Variants (Color / Size - Stock)</th>
+        <th>Total Stock</th>
+        <th>Status</th>
+        <th>Last Updated</th>
+    </tr>
+</thead>
+
+                <tbody id="inventory-data">
+                    <tr>
+                        <td>PROD-001</td>
+                        <td>Classic T-Shirt</td>
+                        <td>T-Shirts</td>
+                        <td>Black</td>
+                        <td>M</td>
+                        <td>45</td>
+                        <td>10</td>
+                        <td><span class="status in-stock">In Stock</span></td>
+                        <td>2023-06-10</td>
+                    </tr>
+                    <tr>
+                        <td>PROD-002</td>
+                        <td>Slim Fit Jeans</td>
+                        <td>Jeans</td>
+                        <td>Blue</td>
+                        <td>32</td>
+                        <td>8</td>
+                        <td>5</td>
+                        <td><span class="status low-stock">Low Stock</span></td>
+                        <td>2023-06-12</td>
+                    </tr>
+                    <tr>
+                        <td>PROD-003</td>
+                        <td>Running Sneakers</td>
+                        <td>Sneakers</td>
+                        <td>White</td>
+                        <td>10</td>
+                        <td>0</td>
+                        <td>3</td>
+                        <td><span class="status out-of-stock">Out of Stock</span></td>
+                        <td>2023-06-15</td>
+                    </tr>
+                    <tr>
+                        <td>PROD-004</td>
+                        <td>Summer Dress</td>
+                        <td>Dresses</td>
+                        <td>Red</td>
+                        <td>M</td>
+                        <td>15</td>
+                        <td>5</td>
+                        <td><span class="status in-stock">In Stock</span></td>
+                        <td>2023-06-14</td>
+                    </tr>
+                    <tr>
+                        <td>PROD-005</td>
+                        <td>Denim Jacket</td>
+                        <td>Jackets</td>
+                        <td>Blue</td>
+                        <td>L</td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td><span class="status low-stock">Low Stock</span></td>
+                        <td>2023-06-13</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Low Stock Alert Report Content -->
+<div class="report-content" id="low-stock-report" style="display: none;">
+    <div class="report-title">
+        <h2><i class="fas fa-exclamation-triangle"></i> Low Stock Alerts</h2>
+        <div class="report-actions">
+            <button class="btn btn-outline" id="low-stock-pdf-btn"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn btn-outline" id="low-stock-excel-btn"><i class="fas fa-file-excel"></i> Excel</button>
+            <button class="btn btn-primary" id="low-stock-print-btn"><i class="fas fa-print"></i> Print</button>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-group">
+            <label for="low-stock-category">Category</label>
+            <select id="low-stock-category">
+    <option value="">All Categories</option>
+    <option value="Shirts">Shirts</option>
+    <option value="Pants">Pants</option>
+    <option value="Jackets">Jackets</option>
+</select>
+        </div>
+        <div class="filter-group">
+            <label for="low-stock-severity">Alert Severity</label>
+            <select id="low-stock-severity">
+    <option value="">All Severities</option>
+    <option value="critical">Critical</option>
+    <option value="warning">Warning</option>
+</select>
+        </div>
+        <button class="apply-filters" id="low-stock-apply-filters-btn"><i class="fas fa-filter"></i> Apply Filters</button>
+    </div>
+
+    <!-- Data Display -->
+    <div class="data-display">
+        <div class="table-container">
+            <table id="low-stock-table">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Current Stock</th>
+                        <th>Reorder Level</th>
+                        <th>Stock %</th>
+                        <th>Status</th>
+                        <th>Last Ordered</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="low-stock-data">
+                    <tr>
+                        <td>PROD-002</td>
+                        <td>Slim Fit Jeans</td>
+                        <td>Jeans</td>
+                        <td>8</td>
+                        <td>10</td>
+                        <td>80%</td>
+                        <td><span class="status warning">Warning</span></td>
+                        <td>2023-06-05</td>
+                        <td>
+                            <button class="btn btn-outline btn-sm reorder-btn"><i class="fas fa-shopping-cart"></i> Reorder</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PROD-005</td>
+                        <td>Denim Jacket</td>
+                        <td>Jackets</td>
+                        <td>3</td>
+                        <td>5</td>
+                        <td>60%</td>
+                        <td><span class="status warning">Warning</span></td>
+                        <td>2023-05-28</td>
+                        <td>
+                            <button class="btn btn-outline btn-sm reorder-btn"><i class="fas fa-shopping-cart"></i> Reorder</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>PROD-006</td>
+                        <td>Cotton Polo</td>
+                        <td>T-Shirts</td>
+                        <td>2</td>
+                        <td>15</td>
+                        <td>13%</td>
+                        <td><span class="status critical">Critical</span></td>
+                        <td>2023-06-10</td>
+                        <td>
+                            <button class="btn btn-outline btn-sm reorder-btn"><i class="fas fa-shopping-cart"></i> Reorder</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Profit & Loss Report Content -->
+<div class="report-content" id="profit-loss-report" style="display: none;">
+    <div class="report-title">
+        <h2><i class="fas fa-money-bill-wave"></i> Profit & Loss Statement</h2>
+        <div class="report-actions">
+            <button class="btn btn-outline" id="profit-loss-pdf-btn"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn btn-outline" id="profit-loss-excel-btn"><i class="fas fa-file-excel"></i> Excel</button>
+            <button class="btn btn-primary" id="profit-loss-print-btn"><i class="fas fa-print"></i> Print</button>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-group">
+            <label for="profit-loss-period">Period</label>
+            <select id="profit-loss-period">
+                <option value="this-month">This Month</option>
+                <option value="last-month">Last Month</option>
+                <option value="this-quarter">This Quarter</option>
+                <option value="last-quarter">Last Quarter</option>
+                <option value="this-year">This Year</option>
+                <option value="custom">Custom Range</option>
+            </select>
+        </div>
+        <div class="filter-group" id="profit-loss-custom-range" style="display: none;">
+            <label for="profit-loss-date-range">Date Range</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="date" id="profit-loss-start-date">
+                <span>to</span>
+                <input type="date" id="profit-loss-end-date">
+            </div>
+        </div>
+        <div class="filter-group">
+            <label for="profit-loss-view">View</label>
+            <select id="profit-loss-view">
+                <option value="summary">Summary</option>
+                <option value="detailed">Detailed</option>
+                <option value="by-category">By Category</option>
+            </select>
+        </div>
+        <button class="apply-filters" id="profit-loss-apply-filters-btn"><i class="fas fa-filter"></i> Apply Filters</button>
+    </div>
+
+    <!-- Summary View -->
+    <div class="data-display" id="profit-loss-summary-view">
+        <div class="financial-summary">
+            <div class="financial-card revenue">
+                <h3>Total Revenue</h3>
+                <p class="amount">$12,450.00</p>
+                <p class="change positive"><i class="fas fa-arrow-up"></i> 12% from last period</p>
+            </div>
+            <div class="financial-card cogs">
+                <h3>Cost of Goods</h3>
+                <p class="amount">$7,200.00</p>
+                <p class="change negative"><i class="fas fa-arrow-down"></i> 8% from last period</p>
+            </div>
+            <div class="financial-card expenses">
+                <h3>Operating Expenses</h3>
+                <p class="amount">$2,800.00</p>
+                <p class="change positive"><i class="fas fa-arrow-up"></i> 5% from last period</p>
+            </div>
+            <div class="financial-card net-profit">
+                <h3>Net Profit</h3>
+                <p class="amount">$2,450.00</p>
+                <p class="change positive"><i class="fas fa-arrow-up"></i> 20% from last period</p>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="profit-loss-summary-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>% of Revenue</th>
+                        <th>Vs Last Period</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total Revenue</td>
+                        <td>$12,450.00</td>
+                        <td>100%</td>
+                        <td class="positive">+12%</td>
+                    </tr>
+                    <tr>
+                        <td>Cost of Goods Sold</td>
+                        <td>$7,200.00</td>
+                        <td>57.8%</td>
+                        <td class="negative">-8%</td>
+                    </tr>
+                    <tr>
+                        <td>Gross Profit</td>
+                        <td>$5,250.00</td>
+                        <td>42.2%</td>
+                        <td class="positive">+25%</td>
+                    </tr>
+                    <tr>
+                        <td>Operating Expenses</td>
+                        <td>$2,800.00</td>
+                        <td>22.5%</td>
+                        <td class="positive">+5%</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Net Profit</td>
+                        <td>$2,450.00</td>
+                        <td>19.7%</td>
+                        <td class="positive">+20%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="graph-container">
+            <canvas id="profitLossChart"></canvas>
+        </div>
+    </div>
+    
+</div>
+<!-- Top Selling Products Report Section -->
+<div class="report-content" id="top-products-report" style="display: none;">
+    <div class="report-title">
+        <h2><i class="fas fa-star"></i> Top Selling Products</h2>
+        <div class="report-actions">
+            <button class="btn btn-outline" id="top-products-pdf-btn"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn btn-outline" id="top-products-excel-btn"><i class="fas fa-file-excel"></i> Excel</button>
+            <button class="btn btn-primary" id="top-products-print-btn"><i class="fas fa-print"></i> Print</button>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-group">
+            <label for="top-products-period">Time Period</label>
+            <select id="top-products-period">
+                <option value="7-days">Last 7 Days</option>
+                <option value="30-days" selected>Last 30 Days</option>
+                <option value="90-days">Last 90 Days</option>
+                <option value="this-month">This Month</option>
+                <option value="custom">Custom Range</option>
+            </select>
+        </div>
+        <div class="filter-group" id="top-products-custom-range" style="display: none;">
+            <label for="top-products-date-range">Date Range</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="date" id="top-products-start-date">
+                <span>to</span>
+                <input type="date" id="top-products-end-date">
+            </div>
+        </div>
+        <div class="filter-group">
+            <label for="top-products-metric">Sort By</label>
+            <select id="top-products-metric">
+                <option value="quantity">Units Sold</option>
+                <option value="revenue">Revenue</option>
+                <option value="profit">Profit</option>
+            </select>
+        </div>
+        <button class="apply-filters" id="top-products-apply-filters-btn"><i class="fas fa-filter"></i> Apply Filters</button>
+    </div>
+
+    <!-- Data Display -->
+    <div class="data-display">
+        <!-- Summary Cards -->
+        <div class="financial-summary">
+            <div class="financial-card">
+                <div class="card-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Total Sales</h3>
+                </div>
+                <div class="card-amount">$24,580.00</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> 18% from last period
+                </div>
+            </div>
+            <div class="financial-card">
+                <div class="card-header">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>Units Sold</h3>
+                </div>
+                <div class="card-amount">1,248</div>
+                <div class="card-change positive">
+                    <i class="fas fa-arrow-up"></i> 12% from last period
+                </div>
+            </div>
+            <div class="financial-card">
+                <div class="card-header">
+                    <i class="fas fa-percentage"></i>
+                    <h3>Top Product Share</h3>
+                </div>
+                <div class="card-amount">22%</div>
+                <div class="card-change negative">
+                    <i class="fas fa-arrow-down"></i> 3% from last period
+                </div>
+            </div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" id="top-products-show-table-btn">
+                <i class="fas fa-table"></i> Table View
+            </button>
+            <button class="view-toggle-btn" id="top-products-show-chart-btn">
+                <i class="fas fa-chart-pie"></i> Chart View
+            </button>
+        </div>
+
+        <!-- Table View -->
+        <div class="table-container" id="top-products-table-container">
+            <table id="top-products-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Units Sold</th>
+                        <th>Revenue</th>
+                        <th>Profit</th>
+                        <th>Profit Margin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Classic White T-Shirt</td>
+                        <td>T-Shirts</td>
+                        <td>328</td>
+                        <td>$4,920.00</td>
+                        <td>$1,968.00</td>
+                        <td>40%</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Slim Fit Jeans</td>
+                        <td>Jeans</td>
+                        <td>215</td>
+                        <td>$5,375.00</td>
+                        <td>$1,881.25</td>
+                        <td>35%</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Running Sneakers</td>
+                        <td>Shoes</td>
+                        <td>187</td>
+                        <td>$5,985.00</td>
+                        <td>$1,795.50</td>
+                        <td>30%</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Summer Dress</td>
+                        <td>Dresses</td>
+                        <td>156</td>
+                        <td>$3,900.00</td>
+                        <td>$1,560.00</td>
+                        <td>40%</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Denim Jacket</td>
+                        <td>Jackets</td>
+                        <td>98</td>
+                        <td>$4,900.00</td>
+                        <td>$1,715.00</td>
+                        <td>35%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Chart View -->
+        <div class="graph-container" id="top-products-chart-container" style="display: none;">
+            <h3 class="graph-title">Top Selling Products</h3>
+            <div class="graph-period-toggle">
+                <button class="view-toggle-btn active" id="top-products-chart-bar-btn">
+                    <i class="fas fa-chart-bar"></i> Bar Chart
+                </button>
+                <button class="view-toggle-btn" id="top-products-chart-pie-btn">
+                    <i class="fas fa-chart-pie"></i> Pie Chart
+                </button>
+            </div>
+            <canvas id="topProductsChart"></canvas>
+        </div>
+    </div>
+</div>
+    </div>
+
+    
+  <script src="Js/sales-report.js" defer>
+  </script>
+</body>
+</html>

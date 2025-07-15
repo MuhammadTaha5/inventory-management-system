@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Full Inventory Dashboard</title>
+  
+  <!-- Remix Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+  .stock-status.normal {
+    color: green;
+    font-weight: bold;
+  }
+  .stock-status.low {
+    color: orange;
+    font-weight: bold;
+  }
+  .stock-status.out {
+    color: red;
+    font-weight: bold;
+  }
+</style>
+
+  <style>
+
+  .table-card select,
+  .table-card .filter-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  .table-card .filter-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .table-card .filter-btn:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+  <!-- Stylesheet -->
+  
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+  <!-- ===== Vertical Sidebar Navigation (HTML only) ===== -->
+<aside id="sidebar" class="sidebar">
+  <!-- 1) Sidebar Header: ClosetStock Logo & Brand Name -->
+  <div class="sidebar__header">
+    <!-- Replace the src with your actual earthy‐tone logo file -->
+    <img 
+      src="Images/Closet.png" 
+      alt="ClosetStock Logo" 
+      class="sidebar__logo" 
+    />
+    <!-- Brand name styled at 22px, using an earthy‐tone font color -->
+    <span 
+      class="sidebar__brand" 
+      style="font-size: 22px; color: #5d4037;"
+    >
+      ClosetStock
+    </span>
+  </div>
+
+  <!-- 2) Main Menu List -->
+  <ul class="sidebar__menu">
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/second-page.html">
+        <img src="Images/box.png"/>
+        <span class="sidebar__text">Products</span>
+
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/purchase.html">
+         <img src="Images/checklist.png"/>
+        <span class="sidebar__text">Purchases</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/salepage.html">
+         <img src="Images/revenue.png"/>
+        <span class="sidebar__text">Sales</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/report.html">
+         <img src="Images/report.png"/>
+        <span class="sidebar__text">Reports</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/logout.html">
+         <img src="Images/logout.png"/>
+        <span class="sidebar__text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</aside>
+  <div class="container">
+
+    <!-- 1) Overview Cards -->
+    <section class="overview-section">
+      <h2>Overview</h2>
+      <div class="overview-cards" id="overview-card-container"></div>
+    </section>
+<!-- Inventory Filters (Optional) -->
+<!-- 2) Inventory Status Table -->
+<div class="table-card">
+  <div class="table-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Inventory Status</h2>
+    <div class="filters" style="display: flex; gap: 10px; align-items: center;">
+      <select id="inventory-category">
+        <option value="">All Categories</option>
+        <option value="Raw Materials">Raw Materials</option>
+        <option value="Finished Goods">Finished Goods</option>
+        <option value="Work-in-Progress">Work-in-Progress</option>
+        <option value="Jackets">Jackets</option>
+        <option value="Shirts">Shirts</option>
+        <option value="Pants">Pants</option>
+      </select>
+      <select id="inventory-size">
+        <option value="">All Sizes</option>
+        <option value="S">Small</option>
+        <option value="M">Medium</option>
+        <option value="L">Large</option>
+      </select>
+      <button class="filter-btn" id="applyInventoryFilters">
+        <i class="ri-filter-3-line"></i> Filter
+      </button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Stock</th>
+        <th>Reorder Level</th>
+        <th>Stock Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="inventory-data">
+      <!-- JS will dynamically fill rows here -->
+    </tbody>
+  </table>
+</div>
+    
+   <div class="dashboard-charts">
+    <!-- Sales Overview -->
+    <div class="chart-box">
+      <h3>Sales Overview</h3>
+      <canvas id="salesOverviewChart"></canvas>
+    </div>
+
+    <!-- Top Selling Items -->
+    <div class="chart-box">
+      <h3>Top Selling Items</h3>
+      <canvas id="topSellingChart"></canvas>
+    </div>
+  </div>
+
+  
+
+    <!-- 4) Purchases & Orders Row -->
+    <div class="tables-row">
+      <!-- Latest Purchases -->
+    <div class="table-card">
+  <div class="table-card-header">
+    <h2>Latest Purchases</h2>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Supplier Name</th>
+        <th>Item Purchased</th>
+        <th>Quantity</th>
+        <th>Purchase Date</th>
+        <th>Total Cost</th>
+      </tr>
+    </thead>
+    <tbody id="latestPurchasesBody">
+      <!-- Rows will be added here dynamically -->
+    </tbody>
+  </table>
+</div>
+
+      <!-- Order Status -->
+      <div class="table-card">
+        <div class="table-card-header">
+          <h2>Order Status</h2>
+          <button class="filter-btn">
+            <i class="ri-calendar-2-line"></i>
+            This Week
+          </button>
+        </div>
+        <ul class="order-list">
+          <li>
+            <span class="order-id">Product ID: 2001</span>
+            <span class="order-company">ABC Textiles</span>
+            <span class="tag processing">Processing</span>
+          </li>
+          <li>
+            <span class="order-id">Product ID: 2002</span>
+            <span class="order-company">XYZ Apparel</span>
+            <span class="tag shipped">Shipped</span>
+          </li>
+          <li>
+            <span class="order-id">Product ID: 2003</span>
+            <span class="order-company">Fashion House</span>
+            <span class="tag delivered">Delivered</span>
+          </li>
+          <li>
+            <span class="order-id">Product ID: 2004</span>
+            <span class="order-company">Global Fabrics</span>
+            <span class="tag processing">Processing</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="Js/script.js" defer>
+    
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', fetchInventoryData);
+  document.getElementById('applyInventoryFilters').addEventListener('click', fetchInventoryData);
+
+  function fetchInventoryData() {
+    const category = document.getElementById('inventory-category').value;
+    const size = document.getElementById('inventory-size').value;
+
+    const url = `php/get_inventory.php?category=${encodeURIComponent(category)}&size=${encodeURIComponent(size)}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        updateInventoryTable(data);
+        
+      })
+      .catch(error => {
+        console.error('Error fetching inventory:', error);
+        showToast('Failed to load inventory data');
+      });
+  }
+
+  function updateInventoryTable(data) {
+    const tbody = document.getElementById('inventory-data');
+    tbody.innerHTML = '';
+
+    if (!Array.isArray(data) || data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7">No inventory data found.</td></tr>';
+      return;
+    }
+
+    data.forEach(item => {
+      const totalStock = parseInt(item.totalStock);
+      const statusText = totalStock > 100 ? 'In Stock' :
+                         totalStock > 0   ? 'Low Stock' : 'Out of Stock';
+      const statusClass = totalStock > 100 ? 'in-stock' :
+                          totalStock > 0   ? 'low-stock' : 'out-of-stock';
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+  <td>${item.productId}</td>
+  <td>${item.productName}</td>
+  <td>${item.category}</td>
+  <td>${item.totalStock}</td>
+  <td>${100}</td>
+  <td><span class="stock-status ${statusClass}">${statusText}</span></td>
+  <td><a href="#">View</a></td>
+`;
+
+      tbody.appendChild(row);
+    });
+  }
+
+  function showToast(message) {
+    alert(message); // Replace with a toast if needed
+  }
+</script>
+  
+  
+
+</body>
+</html>

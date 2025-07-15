@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – Split Files</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="css/product.css" />
+</head>
+<body>
+
+<!-- ===== Vertical Sidebar Navigation (HTML only) ===== -->
+<aside id="sidebar" class="sidebar">
+  <!-- 1) Sidebar Header: ClosetStock Logo & Brand Name -->
+  <div class="sidebar__header">
+    <!-- Replace the src with your actual earthy‐tone logo file -->
+    <img 
+      src="Images/Closet.png" 
+      alt="ClosetStock Logo" 
+      class="sidebar__logo" 
+    />
+    <!-- Brand name styled at 22px, using an earthy‐tone font color -->
+    <span 
+      class="sidebar__brand" 
+      style="font-size: 22px; color: #5d4037;"
+    >
+      ClosetStock
+    </span>
+  </div>
+
+  <!-- 2) Main Menu List -->
+  <ul class="sidebar__menu">
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/second-page.html">
+        <img src="Images/box.png"/>
+        <span class="sidebar__text">Products</span>
+
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/purchase.html">
+         <img src="Images/checklist.png"/>
+        <span class="sidebar__text">Purchases</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/salepage.html">
+         <img src="Images/revenue.png"/>
+        <span class="sidebar__text">Sales</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/report.html">
+         <img src="Images/report.png"/>
+        <span class="sidebar__text">Reports</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/logout.html">
+         <img src="Images/logout.png"/>
+        <span class="sidebar__text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</aside>
+
+ 
+  <header class="toolbar">
+    <div class="search-box">
+      <img src="Images/search.png"  alt="Product" class="product-icon" />
+      <input type="text" name = "SearchPlace" id="searchProduct" placeholder="  Search Product…" />
+    </div>
+    <div class="toolbar-controls">
+      <button class="btn-filter"><i class="fas fa-filter"></i> Filter</button>
+      <button class="btn-add"><i class="fas fa-plus"></i> Add Product</button>
+    </div>
+  </header>
+
+  <section class="stats">
+    <div class="stat-card"><img src="Images/order.png" alt="Total Products" class="stat-img" /><div class="value" id="totalProducts">11,207</div><div class="label">Total Products</div></div>
+    <div class="stat-card"><img src="Images/increase.png" alt="Total Products" class="stat-img" /><div class="value">09,107</div><div class="label">Total Sales Products</div></div>
+    <div class="stat-card"><img src="Images/avalaible.png" alt="Total Products" class="stat-img" /><div class="value">1,997</div><div class="label">Available Products</div></div>
+    <div class="stat-card"><img src="Images/product-return.png" alt="Total Products" class="stat-img" /><div class="value">103</div><div class="label">Return Products</div></div>
+  </section>
+
+  <section class="filter-bar">
+    <div class="filter-dropdown no-border" id="categoryFilter">
+  <span>Category:</span>
+  <select id="categorySelect">
+    <option value="All">All</option>
+    <option value="Jackets">Jackets</option>
+    <option value="Shirts">Shirts</option>
+    <option value="Pants">Pants</option>
+  </select>
+</div>
+
+    <div class="filter-dropdown" id="priceFilter"><span>Price:</span><select><option>$50 - $100</option><option>$100 - $200</option><option>$200+</option></select></div>
+    <div class="filter-dropdown" id="StoreFilter"><span>Store:</span><select><option>All Store</option><option>Store A</option><option>Store B</option></select></div>
+  </section>
+
+  <main>
+    <table class="product-table">
+      <thead>
+  <tr>
+    <th>Product</th>
+    <th>Size</th>
+    <th>Color</th>
+    <th>Price</th>
+    <th>Quantity</th>
+    <th>Status</th>
+    <th>Category</th> <!-- 🆕 Added -->
+    <th>Actions</th>
+  </tr>
+</thead>
+
+      <tbody>
+        <tr><td><div class="product-name">Gabriela Cashmere Blazer</div><span class="sku">XLG2</span></td><td>M</td><td>Gray</td><td>$113.99</td><td>1,113</td><td><span class="status-text active" id="statusProductDisplay">Active</span></td><td><button class="edit-btn"><i class="fas fa-pen"></i> Edit</button><button class="delete-btn"><i class="fas fa-trash"></i></button></td></tr>
+        <tr><td><div class="product-name">Sandro – Jacket – Black</div><span class="sku">LB1</span></td><td>L</td><td>Black</td><td>$113.99</td><td>407</td><td><span class="status-text active">Active</span></td><td><button class="edit-btn"><i class="fas fa-pen"></i> Edit</button><button class="delete-btn"><i class="fas fa-trash"></i></button></td></tr>
+      </tbody>
+    </table>
+  </main>
+<div class="modal" id="addProductModal">
+  <div class="modal-content">
+    <span class="modal-close" id="addProductClose">&times;</span>
+    <h2>Add New Product</h2>
+    <form action="Php/product_Detail.php" method="post" id="addProductForm">
+      <div class="form-group">
+        <label>Product Name</label>
+        <input name="productName" id="productNameInput" required />
+      </div>
+      <div class="form-group">
+        <label>Product ID</label>
+        <input name="productId" id="productIdInput" required />
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select name="category" id="categorySelect">
+          <option>Jackets</option>
+          <option>Shirts</option>
+          <option>Pants</option>
+        </select>
+      </div>
+
+      <hr>
+      <h3>Variants</h3>
+      <div id="variantContainer">
+        <!-- Dynamic variant rows will be added here -->
+      </div>
+
+      <div class="form-group">
+        <button type="button" id="addVariantBtn" class="btn-add">+ Add Variant</button>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-submit">Save</button>
+        <button type="reset" class="btn-reset">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script src="Js/second-page.js" defer></script>
+  
+</body>
+</html>

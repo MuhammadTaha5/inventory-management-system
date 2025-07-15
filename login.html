@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClosetStock - Login</title>
+    <link rel="stylesheet" href="css/login.css"> <!-- Use your full CSS here -->
+</head>
+<body>
+    <div class="login-container">
+        <div class="brand-header">
+            <img src="Images/logo.png" alt="ClosetStock Logo" class="logo">
+            <div class="brand-name">ClosetStock</div>
+        </div>
+
+        <div class="welcome-back">
+            <h1>Welcome Back</h1>
+            <p>Sign in to access your clothing inventory dashboard</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="options">
+                <div class="forgot-password">
+                    <a href="forgot-password.html">Forgot password?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">Log In</button>
+        </form>
+
+        <div class="register-link">
+            Don't have an account? <a href="signup.html">Sign up</a>
+        </div>
+    </div>
+
+    <script src="js/login.js"></script>
+</body>
+</html>

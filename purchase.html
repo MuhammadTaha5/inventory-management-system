@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purchase | ClosetStock</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous"/>
+  <link rel = "stylesheet" href = "css/purchase.css">
+</head>
+<body>
+
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar__header">
+    <img 
+      src="Images/Closet.png" 
+      alt="ClosetStock Logo" 
+      class="sidebar__logo" 
+    />
+    <span class="sidebar__brand">
+      ClosetStock
+    </span>
+  </div>
+
+  <ul class="sidebar__menu">
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/second-page.html">
+        <img src="Images/box.png"/>
+        <span class="sidebar__text">Products</span>
+      </a>
+    </li>
+    <li class="sidebar__item active">
+      <a href="/ClosetInventory/purchase.html">
+         <img src="Images/checklist.png"/>
+        <span class="sidebar__text">Purchases</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/salepage.html">
+         <img src="Images/revenue.png"/>
+        <span class="sidebar__text">Sales</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/ClosetInventory/report.html">
+         <img src="Images/report.png"/>
+        <span class="sidebar__text">Reports</span>
+      </a>
+    </li>
+    <li class="sidebar__item">
+      <a href="/logout.html">
+         <img src="Images/logout.png"/>
+        <span class="sidebar__text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</aside>
+
+  <div class="container">
+    <!-- Header with Search and Add Purchase -->
+    <div class="page-header">
+      <div class="action-bar">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id = "searchInput" placeholder="Search purchases...">
+        </div>
+        <a href="add-purchase.html" id="addPurchaseBtn" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Add Purchase
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-icon-container">
+          <h3>Total Purchase Count</h3>
+          <div class="stat-icon total">
+            <i class="fas fa-boxes"></i>
+          </div>
+        </div>
+        <div class="value" id="purchaseCount">1,207</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon-container">
+          <h3>Monthly Purchase Amount</h3>
+          <div class="stat-icon monthly">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+        </div>
+        <div class="value" id="monthlyPurchaseTotal">$28,450</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon-container">
+          <h3>Pending Orders</h3>
+          <div class="stat-icon pending">
+            <i class="fas fa-clock"></i>
+          </div>
+        </div>
+        <div class="value">42</div>
+      </div>
+    </div>
+
+    <!-- Purchase Table -->
+    <div class="table-container">
+      <table class="purchase-table">
+        <thead>
+          <tr>
+            <th>Purchase ID</th>
+            <th>Supplier</th>
+            <th>Variant Id</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th>Invoice Number</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tbody id="purchase-table-body">
+  <!-- Rows will be inserted here via JavaScript -->
+</tbody>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<script src = "js/purchase.js"></script>
+</body>
+</html>

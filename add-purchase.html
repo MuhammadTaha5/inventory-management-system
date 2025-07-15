@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Purchase - ClosetStock</title>
+  <link rel="stylesheet" href="css/add-purchase.css"/>
+</head>
+<body>
+
+  <h1>Add New Purchase</h1>
+
+  <form id="purchaseForm" action="Php/addPurchase.php" method="post">
+
+    <!-- Supplier Details -->
+    <fieldset>
+      <legend>Supplier Details</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="SupplierDetails">Name</label>
+          <input type="text" id="SupplierName" name="supplierName" required>
+        </div>
+        <div class="form-group">
+          <label for="customerEmail">Email</label>
+          <input type="email" id="SupplierEmail" name="supplierEmail" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="customerPhone">Phone Number</label>
+          <input type="text" id="SupplierPhone" name="supplierPhone" required>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Sale Info -->
+    <fieldset>
+      <legend>Purchase Info</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="purchaseId">Purchase ID</label>
+          <input type="text" id="purchaseId" name="purchaseId" required>
+        </div>
+        <div class="form-group">
+          <label for="Supplier">Supplier Name</label>
+          <input type="text" id="employer" name="employer" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="invoice">Invoice No</label>
+          <input type="text" id="invoice" name="invoice" required>
+        </div>
+        <div class="form-group">
+          <label for="paymentMethod">Payment Method</label>
+          <select id="paymentMethod" name="paymentMethod" required>
+            <option value="" disabled selected>Select</option>
+            <option value="Cash">Cash</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Cheque">Cheque</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Product Section -->
+    <fieldset id="productSection">
+      <legend>Products</legend>
+      <div class="product">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" class="productName" name="productName[]" required autocomplete="off">
+            <div class="suggestion-box"></div>
+
+          </div>
+          <div class="form-group">
+            <label>Color</label>
+            <select name="productColor[]" class="productColor" required>
+              <option value="" disabled selected>Select</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Size</label>
+            <select name="productSize[]" class="productSize" required>
+              <option value="" disabled selected>Select</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" name="productQty[]" min="1" required>
+          </div>
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" name="productPrice[]" step="0.01" required>
+          </div>
+        </div>
+      </div>
+      
+    </fieldset>
+<button type="button" id="addProductBtn">+ Add More Product</button>
+    <div class="total">
+      <strong>Total Bill: Rs: <span id="totalBill">0.00</span></strong>
+    </div>
+
+    <button type="submit" id="submitBtn">Submit New Purchase</button>
+  </form>
+
+  <script src="Js/add-purchase.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</body>
+</html>

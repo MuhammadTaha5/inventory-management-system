@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product & Variants</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    .product-row {
+      background-color: #f5f5f5;
+    }
+    .variant-subtable {
+      width: 100%;
+      border: 1px solid #ddd;
+      background-color: #fafafa;
+    }
+    .variant-subtable th {
+      background-color: #e9e9e9;
+    }
+    .expand-btn {
+      background-color: #007bff;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .expand-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Product List with Variants</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product ID</th>
+      <th>Name</th>
+      <th>Brand</th>
+      <th>Type</th>
+      <th>Status</th>
+      <th>Base Price</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Product Row -->
+    <tr class="product-row">
+      <td>P001</td>
+      <td>CyperPunk</td>
+      <td>XYZ</td>
+      <td>Jacket</td>
+      <td>Active</td>
+      <td>799.00</td>
+      <td><button class="expand-btn" onclick="toggleVariants(this)">Show Variants</button></td>
+    </tr>
+    <!-- Variant Row (Initially Hidden) -->
+    <tr class="variant-row" style="display: none;">
+      <td colspan="7">
+        <table class="variant-subtable">
+          <thead>
+            <tr>
+              <th>Variant ID</th>
+              <th>Color</th>
+              <th>Size</th>
+              <th>Style</th>
+              <th>Selling Price</th>
+              <th>In Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>V001</td>
+              <td>Orange</td>
+              <td>S</td>
+              <td>Bomber</td>
+              <td>799.00</td>
+              <td>90</td>
+            </tr>
+            <tr>
+              <td>V002</td>
+              <td>Orange</td>
+              <td>L</td>
+              <td>Bomber</td>
+              <td>799.00</td>
+              <td>50</td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<script>
+  function toggleVariants(button) {
+    const row = button.closest('tr');
+    const nextRow = row.nextElementSibling;
+    const isVisible = nextRow.style.display === 'table-row';
+    nextRow.style.display = isVisible ? 'none' : 'table-row';
+    button.textContent = isVisible ? 'Show Variants' : 'Hide Variants';
+  }
+</script>
+
+</body>
+</html>

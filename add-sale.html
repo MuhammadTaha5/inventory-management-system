@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Sale - ClosetStock</title>
+  <link rel="stylesheet" href="css/add-sale.css" />
+</head>
+<body>
+
+  <h1>Add New Sale</h1>
+
+  <form id="saleForm" action="Php/addSale.php" method="post">
+
+    <!-- Customer Details -->
+    <fieldset>
+      <legend>Customer Details</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="customerName">Name</label>
+          <input type="text" id="customerName" name="customerName" required>
+        </div>
+        <div class="form-group">
+          <label for="customerEmail">Email</label>
+          <input type="email" id="customerEmail" name="customerEmail" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="customerPhone">Phone Number</label>
+          <input type="tel" id="customerPhone" name="customerPhone" required>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Sale Info -->
+    <fieldset>
+      <legend>Sale Info</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="saleId">Sale ID</label>
+          <input type="text" id="saleId" name="saleId" required>
+        </div>
+        <div class="form-group">
+          <label for="employer">Employer</label>
+          <input type="text" id="employer" name="employer" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="invoice">Invoice No</label>
+          <input type="text" id="invoice" name="invoiceNum" required>
+        </div>
+        <div class="form-group">
+          <label for="paymentMethod">Payment Method</label>
+          <select id="paymentMethod" name="paymentMethod" required>
+            <option value="" disabled selected>Select</option>
+            <option value="Cash">Cash</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Cheque">Cheque</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+       <!-- Product Section -->
+    <fieldset id="productSection">
+      <legend>Products</legend>
+      <div class="product">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" class="productName" name="productName[]" required autocomplete="off">
+            <div class="suggestion-box"></div>
+
+          </div>
+          <div class="form-group">
+            <label>Color</label>
+            <select name="productColor[]" class="productColor" required>
+              <option value="" disabled selected>Select</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Size</label>
+            <select name="productSize[]" class="productSize" required>
+              <option value="" disabled selected>Select</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" name="productQty[]" min="1" required >
+          </div>
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" name="productPrice[]" step="0.01" required readonly>
+          </div>
+        </div>
+      </div>
+      
+    </fieldset>
+    <button type="button" id="addProductBtn">+ Add More Product</button>
+    <div class="total">
+      <strong>Total Bill: Rs: <span id="totalBill">0.00</span></strong>
+    </div>
+
+    <button type="submit" >Submit New Sale</button>
+    <button type="button" onclick="generatePDF()">Download Bill PDF</button>
+
+  </form>
+
+  <script src="Js/add-sale.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
+  <script>
+      const form = document.getElementById("saleForm");
+  const customerNameInput = document.querySelector("input[name='customerName']");
+  const customerEmailInput = document.querySelector("input[name='customerEmail']");
+  const customerPhone = document.querySelector("input[name='customerPhone']");
+  const saleId = document.querySelector("input[name='saleId']");
+  const employer = document.querySelector("input[name='employer']");
+  const paymentMethod = document.querySelector("select[name='paymentMethod']");
+  const invoiceNoInput = document.querySelector("input[name='invoiceNum']");
+  const invoiceDisplay = document.getElementById("invoiceDisplay");
+  const supplierDisplay = document.getElementById("supplierDisplay");
+  const totalBill = document.getElementById("totalBill");
+function calculateTotal() {
+  let total = 0;
+  const qtyFields = document.getElementsByName('productQty[]');
+  const priceFields = document.getElementsByName('productPrice[]');
+
+  for (let i = 0; i < qtyFields.length; i++) {
+    const qty = parseFloat(qtyFields[i].value) || 0;
+    const price = parseFloat(priceFields[i].value) || 0;
+    total += qty * price;
+  }
+
+  document.getElementById('totalBill').textContent = total.toFixed(2);
+}
+calculateTotal();
+function generatePDF() {
+  const props = {
+    outputType: jsPDFInvoiceTemplate.OutputType.Save,
+    returnJsPDFDocObject: true,
+    fileName: "Invoice",
+    orientationLandscape: false,
+    compress: true,
+    logo: {
+      src: "Images/Closet.png",
+      width: 33.33,
+      height: 26.66,
+    },
+    business: {
+      name: "Closet Stock",
+      address: "Lahore Pakistan",
+      phone: "+923089169822",
+      email: "taha.saeed339@gmail.com",
+    },
+    contact: {
+      label: "Invoice issued for:",
+      name: customerNameInput.value.trim(),
+      address: customerEmailInput.value.trim(),
+      phone: customerPhone.value.trim(),
+      email: customerEmailInput.value.trim(),
+    },
+    invoice: {
+      label: "Invoice #: ",
+      num: invoiceNoInput.value.trim(),
+      invDate: "Payment Method: " + paymentMethod.value,
+      invGenDate: "Generated On: " + new Date().toLocaleString(),
+      header: [
+        { title: "#", style: { width: 10 } },
+        { title: "Product" },
+        { title: "Color" },
+        { title: "Size" },
+        { title: "Qty" },
+        { title: "Price" },
+        { title: "Total" },
+      ],
+      table: generateProductTable(), // function below
+      additionalRows: [
+        {
+          col1: 'Total:',
+          col2: totalBill.textContent.trim(),
+          col3: 'PKR',
+        }
+      ],
+      invDescLabel: "Note",
+      invDesc: "Thanks for shopping with us.",
+    },
+    footer: {
+      text: "This invoice is computer-generated and does not require signature.",
+    },
+    pageEnable: true,
+    pageLabel: "Page ",
+  };
+
+  var pdfObject = jsPDFInvoiceTemplate.default(props);
+  console.log("PDF Generated: ", pdfObject);
+}
+function generateProductTable() {
+  const names = document.getElementsByName('productName[]');
+  const colors = document.getElementsByName('productColor[]');
+  const sizes = document.getElementsByName('productSize[]');
+  const qtys = document.getElementsByName('productQty[]');
+  const prices = document.getElementsByName('productPrice[]');
+
+  const table = [];
+
+  for (let i = 0; i < names.length; i++) {
+    const qty = parseFloat(qtys[i].value) || 0;
+    const price = parseFloat(prices[i].value) || 0;
+    const total = qty * price;
+
+    table.push([
+      i + 1,
+      names[i].value.trim(),
+      colors[i].value.trim(),
+      sizes[i].value.trim(),
+      qty,
+      price,
+      total.toFixed(2),
+    ]);
+  }
+
+  return table;
+}
+
+
+  </script>
+</body>
+</html>
