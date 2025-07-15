@@ -1,0 +1,976 @@
+:root {
+  --primary: #4C51BF;
+  --bg-light: rgba(76, 81, 191, 0.1);
+  --text-dark: #2D3748;
+  --text-light: #A0AEC0;
+  --border-light: #E2E8F0;
+  --green: #48BB78;
+  --red: #E53E3E;
+  --yellow: #ECC94B;
+  --bg-page: #F7FAFC;
+}
+/* ===== Global Navbar Styles ===== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #5B21B6; /* Deep purple (similar to second image) */
+  padding: 0.75rem 1.5rem;   /* Vertical/horizontal padding */
+}
+
+/* Brand section: logo + site name */
+.navbar__brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__logo {
+  width: 32px;   /* adjust as needed */
+  height: 32px;  /* adjust as needed */
+  margin-right: 0.5rem;
+}
+
+.navbar__title {
+  color: #FFFFFF;          /* White text */
+  font-size: 1.25rem;      /* 20px */
+  font-weight: 600;        /* Semi-bold */
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Menu items (Products, Purchases, etc.) */
+.navbar__menu {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;             /* Space between items */
+}
+
+.navbar__item a {
+  color: #FFFFFF;          /* White text */
+  text-decoration: none;
+  font-size: 1rem;         /* 16px */
+  font-weight: 500;        /* Medium weight */
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar__item a:hover {
+  color: #D1D5DB;          /* Light-gray on hover */
+}
+
+
+/* --- Reset & Layout --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-dark);
+}
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  margin-left: 100px;
+  padding: 0 1rem;
+}
+
+/* === 1) Overview Cards === */
+.overview-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  margin-left: 30px;
+  
+}
+.overview-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin-left: 15px;
+}
+.overview-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+}
+.card-header { display: flex; align-items: center; gap: 0.75rem; }
+.icon-wrapper {
+  width: 36px; height: 36px;
+  background: var(--bg-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary); font-size: 1.2rem;
+}
+.title { font-size: 1rem; font-weight: 600; }
+.card-body {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 1rem; gap: 1rem;
+}
+.metric .label { font-size: 0.75rem; color: var(--text-light); }
+.metric .value {
+  font-size: 1.75rem; font-weight: 700; margin-top: 0.25rem;
+}
+.change { text-align: right; }
+.percentage { font-size: 0.875rem; font-weight: 600; }
+.percentage.up   { color: var(--green); }
+.percentage.down { color: var(--red); }
+.change-period {
+  font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;
+}
+
+/* === 2) Inventory Status Table === */
+.table-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  margin-left: 15px;
+}
+.table-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+.table-card-header h2 { font-size: 1.25rem; }
+.filter-btn {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: none; border: 1px solid var(--primary);
+  border-radius: 6px; padding: 0.4rem 0.8rem;
+  color: var(--primary); font-size: 0.9rem; cursor: pointer;
+}
+.filter-btn i { font-size: 1.1rem; }
+
+/* Tables */
+table {
+  width: 100%; border-collapse: collapse;
+}
+thead th {
+  text-align: left; padding: 0.75rem;
+  background: #fff; border-bottom: 2px solid var(--border-light);
+  font-size: 0.9rem; color: var(--text-dark);
+}
+tbody td {
+  padding: 0.75rem; border-bottom: 1px solid var(--border-light);
+  font-size: 0.9rem;
+}
+tbody tr:nth-child(even) { background: rgba(0,0,0,0.03); }
+tbody tr:last-child td { border-bottom: none; }
+.stock-status.normal { color: var(--green); font-weight: 600; }
+.stock-status.low    { color: var(--red);   font-weight: 600; }
+.actions a { color: var(--primary); text-decoration: none; }
+
+/* === 3) Charts Row === */
+.charts-row {
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 1rem; margin-bottom: 2rem;
+}
+.chart-card {
+  background: #fff; border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+}
+.chart-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+.chart-card-header h2 { font-size: 1.25rem; }
+.menu-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 1.2rem; color: var(--text-light);
+}
+.chart-card canvas {
+  width: 100% !important; height: 300px !important;
+}
+
+/* === 4) Tables Row: Latest Purchases + Order Status === */
+.tables-row {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 1rem;
+}
+.order-list {
+  list-style: none; padding: 0;
+}
+.order-list li {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.6rem 0; border-bottom: 1px solid var(--border-light);
+  font-size: 0.9rem;
+}
+.order-list li:last-child { border-bottom: none; }
+.order-id {
+  color: var(--text-light); font-size: 0.8rem;
+  min-width: 100px;
+}
+.order-company { flex: 1; margin: 0 1rem; }
+.tag {
+  padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem;
+  color: #fff;
+}
+.processing { background: var(--primary); }
+.shipped    { background: var(--yellow); }
+.delivered  { background: var(--green); }
+/* reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* page gradient background */
+body {
+  font-family: sans-serif;
+  background: linear-gradient(180deg, #f5f7fa 0%, #ffffff 100%);
+  color: #333;
+}
+
+/* Toolbar gradient */
+.toolbar {
+  position: sticky; top: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  height: 60px; padding: 0 24px;
+  background: linear-gradient(90deg, #6941C6 0%, #7F56D9 100%);
+  z-index: 10;
+}
+.toolbar .search-box {
+  position: relative; width: 260px;
+}
+.toolbar .search-box input {
+  width: 100%; height: 40px;
+  padding: 0 12px 0 36px;
+  border: none; border-radius: 8px;
+  background: #f1f2f4; font-size: 14px; color: #333;
+  outline: none;
+}
+.toolbar .search-box i {
+  position: absolute; top: 50%; left: 12px;
+  transform: translateY(-50%); color: #8a8a8f; font-size: 14px;
+}
+.toolbar .toolbar-controls {
+  display: flex; align-items: center; gap: 12px;
+}
+
+/* Add Product white btn */
+.btn-add {
+  background: #FFFFFF;
+  color: #6941C6;
+  border: 1px solid #6941C6;
+}
+.btn-add:hover {
+  background: #f5f6f8;
+}
+
+/* Filter row */
+.filter-bar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 24px; background: #fff;
+  border-bottom: 1px solid #e0e0e5;
+}
+/* remove border on specific dropdown */
+.filter-dropdown.no-border {
+  border: none;
+}
+.filter-dropdown {
+  display: flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 12px;
+  background: #fff; border: 1px solid #e0e0e5; border-radius: 8px;
+  font-size: 14px; color: #333;
+}
+.filter-dropdown span {
+  color: #6e6e73;
+}
+.filter-dropdown select {
+  border: none; background: transparent;
+  font-size: 14px; color: #333; outline: none;
+  cursor: pointer;
+}
+
+/* Stats */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 24px;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid #e0e0e5;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.stat-card .value {
+  font-size: 28px; font-weight: 600;
+}
+.stat-card .label {
+  margin-top: 4px; font-size: 14px; color: #6e6e73;
+}
+
+/* Product table */
+.product-table {
+  width: calc(100% - 48px);
+  margin: 0 24px 24px;
+  border-collapse: collapse;
+  padding-left: 20px;
+}
+.product-table th,
+.product-table td {
+  padding: 15px 13px; font-size: 14px; text-align: left;
+}
+.product-table th {
+  color: #6e6e73; font-weight: 500;
+  border-bottom: 1px solid #e0e0e5;
+}
+.product-table td {
+  border-bottom: 1px solid #e0e0e5;
+  vertical-align: middle;
+}
+
+/* Column widths */
+.product-table th:nth-child(1),
+.product-table td:nth-child(1) { width: 280px; } /* Product Name + ID */
+.product-table th:nth-child(2),
+.product-table td:nth-child(2) { width:  80px; } /* Size */
+.product-table th:nth-child(3),
+.product-table td:nth-child(3) { width: 100px; } /* Color */
+.product-table th:nth-child(4),
+.product-table td:nth-child(4) { width: 120px; } /* Price */
+.product-table th:nth-child(5),
+.product-table td:nth-child(5) { width: 120px; } /* Quantity */
+.product-table th:nth-child(6),
+.product-table td:nth-child(6) { width: 140px; } /* Status */
+.product-table th:nth-child(7),
+.product-table td:nth-child(7) { width: 120px; } /* 🆕 Category */
+.product-table th:nth-child(8),
+.product-table td:nth-child(8) { width: 140px; } /* Actions */
+
+
+/* Product name & SKU */
+.product-name {
+  display: flex; flex-direction: column; gap: 4px; font-weight: bold;
+}
+.product-name .sku {
+  font-size: 12px; color: #8a8a8f;
+}
+
+/* Status text */
+.status-text {
+  font-size: 14px; font-weight: 500;
+}
+.status-text.active { color: #12DC7E; }
+.status-text.draft  { color: #E1E3E5; }
+
+/* Action buttons */
+.edit-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #6941c6; color: #fff;
+  border: none; border-radius: 8px;
+  padding: 6px 12px; cursor: pointer;
+}
+.edit-btn:hover { background: #5a33b1; }
+
+.delete-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #FFFFFF; color: #333333;
+  border: none; border-radius: 8px;
+  padding: 6px 12px; cursor: pointer;
+}
+.delete-btn:hover { background: #F5F6F8; }
+/* --- Filter & Add Buttons --- */
+.btn-filter,
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+/* Filter button: white bg, purple text & border */
+.btn-filter {
+  background: #FFFFFF;
+  color: #6941C6;
+  border: 2px solid #6941C6;
+  box-shadow: 0 2px 6px rgba(105, 65, 198, 0.2);
+}
+.btn-filter:hover {
+  background: #F5F0FF;
+  box-shadow: 0 4px 12px rgba(105, 65, 198, 0.3);
+}
+
+/* Add button: solid purple gradient */
+/* Add Product as white button */
+.btn-add {
+  background: #FFFFFF;           
+  color: #6941C6;                
+  border: 2px solid #6941C6;     
+  box-shadow: 0 2px 6px rgba(105, 65, 198, 0.2);
+}
+.btn-add:hover {
+  background: #F5F0FF;           
+  box-shadow: 0 4px 12px rgba(105, 65, 198, 0.3);
+}
+.filter-bar {
+  display: flex;
+  justify-content: center;   /* centruurt de hele rij */
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e5;
+}
+/* Align Edit & Delete buttons on the same baseline */
+.edit-btn,
+.delete-btn {
+  display: inline-flex;       /* flex container */
+  align-items: center;        /* center vertically */
+  justify-content: center;    /* center horizontally */
+  vertical-align: middle;     /* baseline alignment */
+  line-height: 1;             /* ensure no extra line-height */
+}
+
+/* If the trash icon itself is still a hair off, explicitly center it */
+.delete-btn .fa-trash {
+  vertical-align: middle;
+}
+.status-text.active { 
+  color: #7F56D9; /* your purple shade */
+  font-size: 15px; 
+}
+status-text.active{
+  border-width: 2px;
+  border-color: black;
+}
+.status-text.draft { 
+  color: grey; /* your purple shade */ 
+}
+/* Ensure .product-name stacks its children vertically */
+.sku{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Style for the new ID line */
+.sku {
+  font-size: 12px;
+  color: #6e6e73;      /* a muted grey like your old SKU color */
+  font-weight: 400;
+}
+
+/* Price filter zonder border */
+.filter-bar .filter-dropdown {
+  border: none;
+  box-shadow: none;
+}
+/* Style only the icon in the total-products card */
+/* make the card a positioning context */
+/* 1) کارڈ کو position context دے دیں */
+/* کارڈ کو تھوڑا extra left-padding دیں */
+.stat-card.stat-total-products {
+  position: relative;
+  padding: 24px 20px 20px 80px; /* ↑ اوپر 24px، بائیں 80px */
+}
+
+
+.stat-card .stat-icon {
+  position: absolute;
+  top: 30px;       /* کارڈ کے ٹاپ سے فاصلہ */
+  left: 30px;      
+  width: 42px;    
+  height: 42px;
+  opacity: 0.9;
+}
+
+
+.stat-card.stat-total-products .value {
+  margin-left: 0;      
+  margin-top: 8px;     
+  font-size: 2rem;     
+}
+
+
+.stat-card.stat-total-products .label {
+  margin-top: 4px;
+}
+/* Icon styling in stat cards */
+/* Image styling in stat cards */
+.stat-img {
+  display: block;           /* zet de afbeelding bovenaan */
+  width: 32px;              /* gelijke grootte voor alle images */
+  height: 32px;
+  object-fit: contain;
+  margin: 0 auto 4px;      /* center + kleine ruimte naar cijfers */
+}
+.search-box {
+  position: relative;
+  width: 260px;
+}
+.search-box .product-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8a8a8f;
+  font-size: 18px;
+}
+.search-box input {
+  width: 100%;
+  height: 40px;
+  padding: 0 36px;       /* ruimte voor íé ts aan beide kanten */
+  padding-left: 36px;    /* ícoon + kleine buffer */
+  border: none;
+  border-radius: 8px;
+  background: #f1f2f4;
+  outline: none;
+  font-size: 14px;
+}
+.search-box .fa-search {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8a8a8f;
+  font-size: 18px;
+}
+/* Add Product Modal Styles */
+.modal {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center; align-items: center;
+  z-index: 100;
+}
+.modal.active { display: flex; }
+.modal-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  width: 90%; max-width: 480px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.modal-close {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 24px; cursor: pointer; color: #666;
+}
+.modal-content h2 {
+  margin-bottom: 16px; color: #6941C6; text-align: center;
+}
+.form-group, .form-group-inline { margin-bottom: 16px; }
+.form-group label { display: block; margin-bottom: 6px; font-size: 14px; }
+.form-group input,
+.form-group select {
+  width: 100%; height: 36px; padding: 0 8px;
+  border: 1px solid #e0e0e5; border-radius: 6px; outline: none;
+  font-size: 14px;
+}
+.form-group-inline { display: flex; gap: 12px; }
+.form-actions {
+  display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;
+}
+.btn-submit {
+  background: linear-gradient(90deg, #6941C6, #7F56D9);
+  color: #fff; border: none;
+  padding: 8px 16px; border-radius: 6px; cursor: pointer;
+}
+.btn-reset {
+  background: #fff; color: #6941C6;
+  border: 1px solid #6941C6;
+  padding: 8px 16px; border-radius: 6px; cursor: pointer;
+}
+.btn-reset:hover { background: #F5F0FF; }
+
+/* Variant container styling */
+#variantContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* Individual variant row */
+.variantRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid #e0e0e5;
+  border-radius: 6px;
+  background-color: #f9f9fc;
+}
+
+/* Variant row input/select styling */
+.variantRow select,
+.variantRow input {
+  flex: 1 1 100px;
+  min-width: 100px;
+  height: 32px;
+  padding: 0 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* Remove button */
+.removeVariantBtn {
+  background-color: #ffe2e2;
+  color: #b00020;
+  border: 1px solid #ffcccc;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.removeVariantBtn:hover {
+  background-color: #ffcccc;
+}
+
+/* Add Variant Button */
+.btn-add {
+  background-color: #E9D7FE;
+  color: #6941C6;
+  border: 1px solid #6941C6;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-add:hover {
+  background-color: #F4EBFF;
+}
+
+/* ===== Sidebar Container ===== */
+.sidebar {
+  position: fixed;               /* Stick to the left */
+  top: 0;
+  left: 0;
+  height: 100vh;                 /* Full viewport height */
+  width: 240px;                  /* Adjust width as needed */
+  background-color: #ffffff;     /* White background */
+  border-right: 1px solid #e5e7eb; /* Light gray border */
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;             /* Space above logo */
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  z-index: 1000;                 /* On top of main content */
+}
+
+/* ===== Sidebar Header ===== */
+.sidebar__header {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem 1rem;          /* Left/right 1rem, bottom 1rem */
+  border-bottom: 1px solid #e5e7eb;
+}
+.sidebar__logo {
+  width: 32px;                   /* Logo size */
+  height: 32px;
+  margin-right: 0.5rem;
+}
+.sidebar__brand {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1.25rem;            /* 20px */
+  font-weight: 600;
+  color: #1f2937;                /* Dark gray */
+}
+
+/* ===== Menu List ===== */
+.sidebar__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;                       /* Fill remaining height */
+  overflow-y: auto;              /* Scroll if too many items */
+}
+
+.sidebar__item {
+  position: relative;
+}
+
+.sidebar__item > a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;                  /* Space between icon & text */
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #374151;                /* Slate‐700 */
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;               /* 16px */
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.sidebar__item > a:hover {
+  background-color: #f3f4f6;     /* Gray‐100 */
+  color: #111827;                /* Gray‐900 */
+}
+
+/* Icon placeholder (you can replace with real SVG) */
+.sidebar__icon {
+  font-size: 1.25rem;            /* 20px */
+}
+
+/* Text label */
+.sidebar__text {
+  flex: 1;                       /* Take remaining horizontal space */
+}
+
+/* ===== Dropdown / Submenu ===== */
+.sidebar__dropdown > .sidebar__link {
+  cursor: pointer;
+}
+
+.sidebar__arrow {
+  font-size: 0.75rem;            /* 12px */
+  transition: transform 0.2s ease, color 0.2s ease;
+  color: #6b7280;                /* Gray‐500 */
+}
+/* Rotate arrow when “open” */
+.sidebar__dropdown.open > .sidebar__link .sidebar__arrow {
+  transform: rotate(90deg);
+  color: #374151;                /* Darker gray when open */
+}
+
+/* Submenu is hidden by default */
+.sidebar__submenu {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* Show submenu when parent has .open */
+.sidebar__dropdown.open > .sidebar__submenu {
+  display: block;
+}
+.sidebar__submenu li a {
+  display: block;
+  padding: 0.5rem 1.75rem;       /* Indent under parent */
+  font-size: 0.95rem;
+  color: #4b5563;                /* Gray‐600 */
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.sidebar__submenu li a:hover {
+  background-color: #f9fafb;     /* Gray‐50 */
+  color: #111827;                /* Gray‐900 */
+}
+
+/* ===== Active / Highlighted Link ===== */
+.sidebar__menu a.active,
+.sidebar__submenu a.active {
+  background-color: #e5e7eb;     /* Gray‐200 */
+  color: #1f2937;                /* Gray‐800 */
+  font-weight: 600;
+}
+/* ===== style.css ===== */
+
+/* 1) Base sidebar styling (unchanged) */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+/* 2) When `.hidden` is applied, slide sidebar off-screen to the left */
+.sidebar.hidden {
+  transform: translateX(-240px);
+}
+
+/* 3) Ensure the main content is shifted right by sidebar’s width */
+.container {
+  margin-left: 240px;
+  padding: 1.5rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* (Rest of your existing CSS for cards, tables, charts, etc.) */
+
+/* Example: Sidebar header and menu items */
+.sidebar__header {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+.sidebar__logo {
+  width: 32px;
+  height: 32px;
+  margin-right: 0.5rem;
+}
+.sidebar__brand {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1.375rem; /* 22px */
+  font-weight: 600;
+  color: #5d4037;
+}
+.sidebar__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+  margin-right: 10px;
+}
+.sidebar__item > a {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #374151;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.sidebar__item > a:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+/* Ensures all sidebar image icons are the same size */
+.sidebar__icon-image {
+  width: 20px;             /* Set a fixed width */
+  height: 20px;            /* Set a fixed height */
+  object-fit: contain;     /* Preserve aspect ratio */
+  margin-right: 0.75rem;   /* Space between icon and text */
+  vertical-align: middle;  /* Aligns the icon with text baseline */
+}
+
+/* 2) If you don’t want to add a class, you can target the <img> directly inside .sidebar__item: */
+.sidebar__item > img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+}
+/* Target the specific box.png inside a sidebar item */
+.sidebar__item img[src="Images/box.png"],.sidebar__item img[src="Images/checklist.png"],.sidebar__item img[src="Images/report.png"],.sidebar__item img[src="Images/revenue.png"],.sidebar__item img[src="Images/logout.png"] {
+  width: 20px;             /* set the image width */
+  height: 20px;            /* set the image height */
+  object-fit: contain;     /* preserve aspect ratio */
+  margin-right: 0.1rem;   /* space between icon and text */
+  vertical-align: middle;  /* align icon with text baseline */
+  display: inline-block;   /* ensure proper inline alignment */
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background-color: #ffffff;
+  /* …other styling… */
+  transition: transform 0.3s ease;
+}
+.sidebar.hidden {
+  transform: translateX(-240px); /* hides it off-screen */
+}
+/* ===== Make sure this is included in your existing stylesheet ===== */
+
+/* 1) Shift your main content container right by the sidebar’s width */
+main,
+.container {
+  margin-left: 240px;    /* Sidebar is 240px wide, so push content 240px to the right */
+  padding: 1rem;         /* Optional inner padding */
+  box-sizing: border-box;
+}
+
+/* 2) If you have other top‐level elements (header, sections, tables, etc.) outside of <main>,
+   you can also shift them to the right. For example: */
+header,
+section.stats,
+section.filter-bar,
+.product-table {
+  margin-left: 240px;
+}
+
+/* 3) Alternatively, you can target every direct child of <body> except the sidebar itself,
+   ensuring everything except <aside class="sidebar"> is pushed right: */
+body > :not(.sidebar) {
+  margin-left: 240px;
+}
+/* 1) Ensure the table does not exceed its container width */
+.product-table {
+  width: 100% !important;      /* Force table to fill its parent */
+  margin: 0;                   /* Remove any left/right margin */
+  overflow-x: hidden;          /* Prevent internal horizontal scrolling */
+  table-layout: auto;          /* Let columns size naturally */
+}
+
+/* 2) If the parent container has padding/margin pushing it right, reset that too */
+.container, 
+main {
+  margin-left: 240px;    /* Keep space for sidebar */
+  margin-top: 0px;      /* Keep space for toolbar */
+  padding-left: 0;       /* Remove any extra padding on the left */
+  padding-right: 0;      /* Optional: remove right padding as well */
+}
+
+/* 3) If you wrapped the table in a scrollable wrapper, disable its scrollbar */
+.table-wrapper {
+  overflow-x: hidden;    /* Hide any horizontal scrollbar */
+}
+
+/* 4) Left-align the entire table inside its wrapper */
+.table-wrapper, 
+.product-table {
+  text-align: left;
+}
+
+#searchProduct
+{
+  margin-left: 10px;
+}
+#styleProduct
+{
+  width: 200px;
+}
+
+#statusProductDisplay
+{
+  color: black;
+}
+   body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .dashboard-charts {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 2rem;
+      gap: 2rem;
+    }
+
+    .chart-box {
+      flex: 1 1 45%;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 300px !important;
+    }
+
+    h3 {
+      margin-bottom: 1rem;
+    }
+    
